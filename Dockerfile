@@ -1,12 +1,21 @@
 FROM node:18-alpine
 
+# Install git so we can grab the files
+RUN apk add --no-cache git
+
 WORKDIR /app
 
-# Install EaglerProxy globally
-RUN npm install -g eaglerproxy
+# Clone the official EaglerProxy repo
+RUN git clone https://github.com .
 
-# Expose Render's required web port
+# Install dependencies and typescript globally
+RUN npm install -g typescript
+RUN npm install
+
+# Compile the TypeScript files into JavaScript
+RUN tsc
+
 EXPOSE 10000
 
-# Run the proxy using environment variables passed from Render
-CMD ["sh", "-c", "eaglerproxy --host 0.0.0.0 --port 10000 --remote-host $REMOTE_HOST --remote-port $REMOTE_PORT"]
+# Use a shell script launch format to swap the config dynamically at startup
+CMD ["sh", "-c", "sed -i \"s/port: .*/port: 10000/\" ./stable_configs/proxy.yml && sed -i \"s/host: .*/host: '$REMOTE_HOST'/\" ./stable_configs/proxy.yml && sed -i \"s/port: .*/port: $REMOTE_PORT/\" ./stable_configs/proxy.yml && node src/index.js"]
