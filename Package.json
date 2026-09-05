@@ -1,0 +1,12 @@
+{
+  "name": "eagler-java-bridge",
+  "version": "1.0.0",
+  "description": "Direct bridge for Geyser/ViaVersion setups",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
