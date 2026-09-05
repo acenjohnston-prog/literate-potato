@@ -1,0 +1,14 @@
+# EaglerProxy Configuration
+server:
+  host: 0.0.0.0
+  port: 10000 # Render requires web services to bind to port 10000 or use the $PORT env variable
+
+# Your target FalixNodes Java Server
+remote:
+  host: 136.243.83.105
+  port: 22815
+
+# Eaglercraft specific translation settings
+settings:
+  online_mode: false # Set to true only if using a premium auth bypass plugin
+  forward_ip: true
