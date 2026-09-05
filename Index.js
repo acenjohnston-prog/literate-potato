@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 const net = require('net');
 
-// Pull configuration from Render environment variables
+// Configuration from Render environment variables
 const REMOTE_HOST = process.env.REMOTE_HOST || '136.243.83.105';
 const REMOTE_PORT = parseInt(process.env.REMOTE_PORT || '22815', 10);
 const PORT = parseInt(process.env.PORT || '10000', 10);
@@ -34,6 +34,21 @@ wss.on('connection', (ws) => {
         if (ws.readyState === WebSocket.OPEN) {
             ws.send(data, { binary: true });
         }
+    });
+
+    ws.on('close', () => {
+        console.log('Eaglercraft client disconnected.');
+        client.destroy();
+    });
+
+    client.on('close', () => {
+        console.log('FalixNodes server dropped the pipeline.');
+        ws.close();
+    });
+
+    ws.on('error', (err) => console.error('Tunnel WebSocket Error:', err.message));
+    client.on('error', (err) => console.error('Tunnel Java Socket Error:', err.message));
+});
     });
 
     ws.on('close', () => {
